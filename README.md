@@ -1,6 +1,6 @@
-# Angular Compatibility Maintenance Initiative
+# Angular 16+ Compatibility Maintenance Initiative
 
-## Overview
+## Can't upgrade to Angular 16+ due to old View Engine dependencies you can't easily remove? We are automating the hassle so you can easily upgrade! 
 
 The Angular Compatibility Maintenance Initiative is a dedicated repository designed to assist the Angular community in transitioning libraries from the View Engine to Ivy, and further maintaining them for compatibility with the latest versions of Angular. This initiative goes beyond the transition, aiming to keep these libraries updated with Angular's latest releases, albeit with a focus on maintenance for Angular version compatibility only, without addressing bugs or introducing new features.
 
