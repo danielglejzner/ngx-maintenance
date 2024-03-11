@@ -1,1 +1,1 @@
-# ngx-maintanance
+# ngx-maintenance
