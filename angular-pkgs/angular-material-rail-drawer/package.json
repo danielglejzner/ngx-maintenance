@@ -1,0 +1,19 @@
+{
+  "name": "@ngx-maintenance/angular-material-rail-drawer",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": ">=12.0.0 <18.0.0",
+    "@angular/core": ">=12.0.0 <18.0.0",
+    "@angular/animations": ">=12.0.0 <18.0.0",
+    "@angular/cdk": ">=12.0.0 <18.0.0",
+    "rxjs": ">=6.5.5"
+  },
+  "dependencies": {
+    "@nx/devkit": "18.0.8",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "nx-migrations": {
+    "migrations": "./migrations.json"
+  }
+}

@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@ngx-maintenance/angular-material-rail-drawer": [
+        "angular-pkgs/angular-material-rail-drawer/src/index.ts"
+      ],
+      "@ngx-maintenance/devkit": ["libs/devkit/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

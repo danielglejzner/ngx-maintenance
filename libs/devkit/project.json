@@ -1,0 +1,23 @@
+{
+  "name": "devkit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/devkit/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/devkit",
+        "main": "libs/devkit/src/index.ts",
+        "tsConfig": "libs/devkit/tsconfig.lib.json",
+        "assets": ["libs/devkit/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs devkit {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    }
+  },
+  "tags": []
+}
