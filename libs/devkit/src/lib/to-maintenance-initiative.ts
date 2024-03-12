@@ -1,17 +1,19 @@
 import { Tree, updateJson, addDependenciesToPackageJson, formatFiles, visitNotIgnoredFiles } from '@nx/devkit';
 
 export function toMaintenanceInitiative(tree: Tree, oldPackageName: string, newVersion = "1.0.0") {
+	// Strip existing scope if present
+	const packageNameWithoutScope = oldPackageName.replace(/^@[^\/]+\//, '');
+	const newPackageName = `@ngx-maintenance/${packageNameWithoutScope}`;
+
 	updateJson(tree, 'package.json', (json) => {
 		for (const deps of [json.dependencies, json.devDependencies]) {
-			if (deps) {
+			if (deps && deps[oldPackageName]) {
 				delete deps[oldPackageName];
+				deps[newPackageName] = newVersion;
 			}
 		}
-
 		return json;
 	});
-
-	addDependenciesToPackageJson(tree, { [`@ngx-maintenance/${oldPackageName}`]: newVersion }, {});
 
 	visitNotIgnoredFiles(tree, '.', (file) => {
 		if (!file.endsWith('.ts')) return;
@@ -20,9 +22,9 @@ export function toMaintenanceInitiative(tree: Tree, oldPackageName: string, newV
 		if (!content) return;
 
 		const importRegex = new RegExp(oldPackageName, 'g');
-		content = content.replace(importRegex, `@ngx-maintenance/${oldPackageName}`);
+		content = content.replace(importRegex, newPackageName);
 
-		tree.write(file, content.replace(importRegex, `@ngx-maintenance/${oldPackageName}`));
+		tree.write(file, content);
 		console.log(`Updated imports in ${file}`);
 	});
 
