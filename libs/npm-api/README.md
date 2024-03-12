@@ -22,6 +22,4 @@ const compatibleVersion = await findCompatibleVersion('packageName', 'versionRan
 ```
 
 ## Documentation
-For detailed documentation and usage examples, please refer to the [API documentation](link-to-your-documentation) provided by @ngx-maintenance/npm-api.
-
----
+For detailed documentation and usage examples please use the docs and jsdocs.
