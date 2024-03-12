@@ -2,7 +2,8 @@
 
 import { createCommand } from '@commander-js/extra-typings';
 import { version } from '../package.json';
-
+import { connect } from 'https';
+import { checkoutImportAndMigrateAngular, getPackageInfo } from '@ngx-maintenance/devkit'
 const cliStyling = {
 	reset: '\x1b[0m',
 	yellow: '\x1b[33m',
@@ -29,23 +30,39 @@ async function main() {
 			console.log(message)
 		})
 
-	// program
-	// 	.command('migrate')
-	// 	.description('Checkout a Git repo and migrate Angular versions')
-	// 	.argument('<repoUrl>', 'URL of the Git repository to clone')
-	// 	.argument('<targetLocation>', 'Directory to clone the repository into')
-	// 	.argument('[packageName]', 'Name of the package to find and migrate', '')
-	// 	.action(async (repoUrl, targetLocation, packageName) => {
-	// 		try {
-	// 			console.log(`Cloning ${repoUrl} into ${targetLocation}...`);
-	// 			const clonedRepoPath = await cloneRepo(repoUrl);
-	// 			const packageDir = await findPackageDir(clonedRepoPath, packageName || path.basename(repoUrl, '.git'));
-	// 			await updateAngularVersions(packageDir);
-	// 			console.log('Migration completed successfully.');
-	// 		} catch (error) {
-	// 			console.error(`Migration failed: ${error.message}`);
-	// 		}
-	// 	});
+	program
+		.command('migrate-npm')
+		.description('Checkout a Git repo and migrate Angular versions')
+		.argument('npm package', 'NPM package name')
+		.argument('[targetLocation]', 'Directory to clone the repository into', '')
+		.action(async (npmPackage, targetLocation?: string) => {
+			try {
+
+				const packageJson = await getPackageInfo(npmPackage, 'latest')
+				const repoUrl = typeof packageJson.repository === 'string' ? packageJson.repository : packageJson?.repository?.url;
+				if (!repoUrl) throw new Error('Cound not locate Github URL from package. Please locate and use migrate-git instead')
+				await checkoutImportAndMigrateAngular(repoUrl, targetLocation);
+				console.log('Migration completed successfully.');
+			} catch (error: any) {
+				console.error(`Migration failed: ${error.message}`);
+			}
+		});
+
+	program
+		.command('migrate-git')
+		.description('Checkout a Git repo and migrate Angular versions')
+		.argument('<repoUrl>', 'URL of the Git repository to clone')
+		.argument('<targetLocation>', 'Directory to clone the repository into', '')
+		.argument('[packageName]', 'Name of the package to find and migrate', '')
+		.action(async (repoUrl, targetLocation, packageName) => {
+			try {
+				await checkoutImportAndMigrateAngular(repoUrl, targetLocation, packageName);
+				console.log('Migration completed successfully.');
+			} catch (error: any) {
+				console.error(`Migration failed: ${error.message}`);
+			}
+		});
+
 
 	program.parse();
 
