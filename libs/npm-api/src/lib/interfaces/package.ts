@@ -1,3 +1,6 @@
+/**
+ * Interface representing package metadata retrieved from the npm registry.
+ */
 export interface PackageMetadata {
 	_id?: string;
 	_rev?: string;

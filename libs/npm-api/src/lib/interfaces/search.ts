@@ -1,3 +1,6 @@
+/**
+ * Interface representing registry search query params.
+ */
 export interface SearchQueryParams {
 	text?: string;
 	size?: number;
@@ -6,7 +9,9 @@ export interface SearchQueryParams {
 	popularity?: number;
 	maintenance?: number;
 }
-
+/**
+ * Interface representing registry search response.
+ */
 export interface SearchResponse {
 	objects: SearchResult[];
 	total: number;

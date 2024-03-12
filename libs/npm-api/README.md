@@ -1,11 +1,27 @@
-# npm-api
+# @ngx-maintenance/npm-api
 
-This library was generated with [Nx](https://nx.dev).
+## Overview
+@ngx-maintenance/npm-api is a strongly typed API SDK for the npm registry API, providing easy access to various endpoints and functionalities.
 
-## Building
+## Installation
+To install @ngx-maintenance/npm-api, simply run:
 
-Run `nx build npm-api` to build the library.
+```bash
+npm install @ngx-maintenance/npm-api
+```
 
-## Running unit tests
+## Usage
+```typescript
+import { fetchNpmApi, findCompatibleVersion } from '@ngx-maintenance/npm-api';
 
-Run `nx test npm-api` to execute the unit tests via [Jest](https://jestjs.io).
+// Fetch registry information
+const registryInfo = await fetchNpmApi('/');
+
+// Find compatible version for a package
+const compatibleVersion = await findCompatibleVersion('packageName', 'versionRange', 'peerDependency');
+```
+
+## Documentation
+For detailed documentation and usage examples, please refer to the [API documentation](link-to-your-documentation) provided by @ngx-maintenance/npm-api.
+
+---

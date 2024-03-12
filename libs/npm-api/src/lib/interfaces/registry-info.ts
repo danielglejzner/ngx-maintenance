@@ -1,3 +1,6 @@
+/**
+ * Interface representing registry data.
+ */
 export interface RegistryInfo {
 	db_name: string;
 	doc_count: number;
