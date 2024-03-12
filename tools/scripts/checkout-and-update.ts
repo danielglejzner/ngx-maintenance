@@ -260,20 +260,28 @@ const updateAngularVersions = async (packageDir: string) => {
 
 					const regex = /requires "([^"]+)", would install "([^"]+)"/;
 					const match2 = versionRange.match(regex);
-					const compatibleVersion = match2?.[2] ? await findCompatibleVersion(packageName, match2[2]) : null;
-					logWithColor(`Found compatible version: ${packageName} ${peerDependency} ${compatibleVersion}`, 'green');
+					const compatibleVersion = match2?.[2] ? await findCompatibleVersion(packageName, match2[2], peerDependency) : null;
 
 					if (compatibleVersion) {
+						logWithColor(`Found compatible version: ${packageName} ${peerDependency} ${compatibleVersion}`, 'green');
 						dependencyUpdates.push({ packageName, versionRange: compatibleVersion })
+					} else if (match2?.[2]) {
+						dependencyUpdates.push({ packageName: peerDependency, versionRange: match2?.[2] })
 					} else {
-						throw new Error('Unable to extract correct version range');
+						logWithColor(`Unable to find compatible version. Trying to force the install`, 'red');
+						try {
+							await executeCommand('npm install -f', packageDir);
+						} catch (error: any) {
+
+							throw new Error('Unable to extract correct version range');
+						}
 					}
 				}
 
 				if (dependencyUpdates.length > 0) {
 					await updatePackageJsonDependencies(packageDir, dependencyUpdates);
 					logWithColor('Attempting to fix incompatible peer dependencies and retrying.', 'yellow');
-					await executeCommand('npm install', packageDir);
+					await executeCommand('npm install -f', packageDir);
 				}
 			} else {
 				retry = false;
@@ -289,7 +297,7 @@ const updateAngularVersions = async (packageDir: string) => {
 	}
 };
 
-export const checkoutImportAndMigrateAngular = async (repoUrl: string, targetLocation: string, packageName?: string) => {
+export const checkoutImportAndMigrateAngular = async (repoUrl: string, targetLocation?: string, packageName?: string) => {
 	let clonedRepoPath = '';
 
 	try {
@@ -310,8 +318,7 @@ export const checkoutImportAndMigrateAngular = async (repoUrl: string, targetLoc
 		const defaultPackageName = getPackageName(repoUrl, packageName);
 		const packageDir = await findPackageDir(clonedRepoPath, defaultPackageName);
 		markFindPackageDirComplete();
-
-		const resolvedTargetLocation = path.resolve(process.cwd(), targetLocation);
+		const resolvedTargetLocation = path.resolve(process.cwd(), targetLocation || `./angular-pkgs/${defaultPackageName}`);
 		if (!existsSync(resolvedTargetLocation)) {
 			await fs.mkdir(resolvedTargetLocation, { recursive: true });
 		}
@@ -333,8 +340,8 @@ export const checkoutImportAndMigrateAngular = async (repoUrl: string, targetLoc
 };
 
 const [, , repoUrl, targetLocation, packageName] = process.argv;
-if (!repoUrl || !targetLocation) {
-	console.log('Usage: npm run upgrade-angular-package <repoUrl> <targetLocation> [packageName]');
+if (!repoUrl) {
+	console.log('Usage: npm run upgrade-angular-package <repoUrl> [targetLocation] [packageName]');
 	process.exit(1);
 }
 

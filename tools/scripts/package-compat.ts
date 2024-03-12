@@ -1,11 +1,12 @@
 import https from 'https';
+import semver from 'semver';
 
 interface PackageInfo {
 	versions: Record<string, any>;
 }
 
-export async function findCompatibleVersion(packageName: string, versionRange: string): Promise<string | null> {
-	const registryUrl = `https://registry.npmjs.org/${encodeURIComponent(packageName)}`;
+export async function findCompatibleVersion(packageName: string, versionRange: string, peerDependency: string): Promise<string | null> {
+	const registryUrl =`https://registry.npmjs.org/${encodeURIComponent(packageName)}`;
 	return new Promise<string | null>((resolve, reject) => {
 		https.get(registryUrl, (response) => {
 			let data = '';
@@ -16,17 +17,13 @@ export async function findCompatibleVersion(packageName: string, versionRange: s
 				try {
 					const packageInfo: PackageInfo = JSON.parse(data);
 					const versions = Object.keys(packageInfo.versions);
-					let compatibleVersion: string | null = null;
+					const compatibleVersion = versions.find(version => {
+						const versionPackageJson: Record<string, any> = packageInfo.versions[version];
+						const packages = { ...(versionPackageJson.dependencies || {}), ...(versionPackageJson.devDependencies || {}), ...(versionPackageJson.peerDependencies || {}) };
+						return semver.satisfies(packages[peerDependency], versionRange);
+					});
 
-					// Check each version against the version range
-					for (const version of versions) {
-						if (satisfiesVersion(version, versionRange)) {
-							compatibleVersion = version;
-							break;
-						}
-					}
-
-					resolve(compatibleVersion);
+					resolve(compatibleVersion || null);
 				} catch (error) {
 					reject(error);
 				}
@@ -35,28 +32,4 @@ export async function findCompatibleVersion(packageName: string, versionRange: s
 			reject(error);
 		});
 	});
-}
-
-// Function to check if a version satisfies a version range
-function satisfiesVersion(version: string, versionRange: string): boolean {
-	const requiredVersion = parseVersion(versionRange);
-	const actualVersion = parseVersion(version);
-	return compareVersions(actualVersion, requiredVersion) <= 0;
-}
-
-// Function to parse version string into an array of numbers
-function parseVersion(versionString: string): number[] {
-	return versionString.split('.').map(Number);
-}
-
-// Function to compare two version arrays
-function compareVersions(version1: number[], version2: number[]): number {
-	for (let i = 0; i < Math.max(version1.length, version2.length); i++) {
-		const a = version1[i] || 0;
-		const b = version2[i] || 0;
-		if (a !== b) {
-			return a - b;
-		}
-	}
-	return 0;
 }
