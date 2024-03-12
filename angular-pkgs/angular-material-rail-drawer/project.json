@@ -1,0 +1,26 @@
+{
+  "name": "angular-material-rail-drawer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "angular-pkgs/angular-material-rail-drawer/src",
+  "prefix": "ngx-maintenance",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "angular-pkgs/angular-material-rail-drawer/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "angular-pkgs/angular-material-rail-drawer/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "angular-pkgs/angular-material-rail-drawer/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  }
+}

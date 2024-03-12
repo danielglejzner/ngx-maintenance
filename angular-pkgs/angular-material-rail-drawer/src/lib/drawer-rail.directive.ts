@@ -1,0 +1,154 @@
+import {
+  forwardRef,
+  Inject,
+  Directive,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+  Host,
+  Self,
+  Optional,
+  Renderer2,
+  Input,
+  AfterViewInit,
+} from '@angular/core';
+import { AnimationMetadata, AnimationBuilder } from '@angular/animations';
+
+import {
+  MatSidenav,
+  MatDrawer,
+  MatSidenavContainer,
+  MatDrawerContainer,
+} from '@angular/material/sidenav';
+
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { miniConfig } from './default.config';
+import {
+  sidebarAnimationCloseGroup,
+  sidebarAnimationOpenGroup,
+} from './animations.settings';
+import { Directionality } from '@angular/cdk/bidi';
+
+@Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
+  selector: 'mat-sidenav[mode="rail"], mat-drawer[mode="rail"], mat-sidenav[rail-mode], mat-drawer[rail-mode]',
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  host: {
+    '[class.mat-drawer-side]': 'true',
+  },
+})
+export class MatDrawerRailDirective
+  implements OnInit, OnDestroy, AfterViewInit
+{
+  public onDestory: Subject<void> = new Subject();
+
+  private drawer: MatSidenav | MatDrawer;
+  private container: MatSidenavContainer | MatDrawerContainer;
+
+  private containerContent?: HTMLElement;
+
+  @Input()
+  public openAnimation?: AnimationMetadata | AnimationMetadata[];
+
+  @Input()
+  public closeAnimation?: AnimationMetadata | AnimationMetadata[];
+
+  @Input()
+  public closeWidth: string = miniConfig.defaultMinWidth;
+
+  @Input()
+  public expandedWidth: string = miniConfig.defaultMaxWidth;
+
+  constructor(
+    private builder: AnimationBuilder,
+    private el: ElementRef<HTMLElement>,
+    private renderer2: Renderer2,
+    @Host() @Self() @Optional() sidenav: MatSidenav,
+    @Host() @Self() @Optional() drawer: MatDrawer,
+    @Inject(forwardRef(() => MatSidenavContainer))
+    @Optional()
+    matSideNavContainer: MatSidenavContainer,
+    @Inject(forwardRef(() => MatDrawerContainer))
+    @Optional()
+    matDrawerContainer: MatDrawerContainer,
+    // tslint:disable-next-line: variable-name
+    @Optional() private _dir: Directionality
+  ) {
+    this.container = matSideNavContainer || matDrawerContainer;
+    this.drawer = sidenav || drawer;
+    this.container.hasBackdrop = false;
+    this.drawer.autoFocus = false;
+  }
+
+  public ngOnInit(): void {
+    this.closeAnimation =
+      this.closeAnimation ||
+      sidebarAnimationCloseGroup(miniConfig.defaultDuration, this.closeWidth);
+    this.openAnimation =
+      this.openAnimation ||
+      sidebarAnimationOpenGroup(miniConfig.defaultDuration, this.expandedWidth);
+    this.renderer2.setStyle(
+      this.el.nativeElement.querySelector('.mat-drawer-inner-container'),
+      'overflow',
+      'hidden'
+    );
+    this.drawer.closedStart.pipe(takeUntil(this.onDestory)).subscribe(() => {
+      this.closeMenu();
+    });
+
+    this.drawer._closedStream.pipe(takeUntil(this.onDestory)).subscribe(() => {
+      this.renderer2.setStyle(this.el.nativeElement, 'visibility', 'visible');
+      this.renderer2.setStyle(this.el.nativeElement, 'display', 'block');
+    });
+
+    this.drawer.openedStart.pipe(takeUntil(this.onDestory)).subscribe(() => {
+      this.correctContentMargin(this.expandedWidth);
+      const factory = this.builder.build(this.openAnimation ?? []);
+      const player = factory.create(this.el.nativeElement);
+      player.play();
+    });
+  }
+
+  ngAfterViewInit() {
+    if (this.drawer.opened) {
+      this.correctContentMargin(this.expandedWidth);
+    } else {
+      this.renderer2.setStyle(this.el.nativeElement, 'visibility', 'visible');
+      this.renderer2.setStyle(this.el.nativeElement, 'display', 'block');
+      this.closeMenu();
+    }
+  }
+
+  private closeMenu() {
+    this.correctContentMargin(this.closeWidth);
+    const factory = this.builder.build(this.closeAnimation ?? []);
+    const player = factory.create(this.el.nativeElement);
+    player.play();
+  }
+
+  private correctContentMargin(width: string) {
+    this.containerContent =
+      (this.containerContent
+        ? this.containerContent
+        : this.el.nativeElement?.parentElement?.querySelector(
+            '.mat-drawer-content'
+          )) ?? undefined;
+    if (
+      (this.drawer.position !== 'end' &&
+        this._dir &&
+        this._dir.value !== 'rtl') ||
+      (this.drawer.position === 'end' && this._dir && this._dir.value === 'rtl')
+    ) {
+      this.renderer2.setStyle(this.containerContent, 'marginLeft', width);
+    } else {
+      this.renderer2.setStyle(this.containerContent, 'marginRight', width);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.onDestory.next();
+    this.onDestory.complete();
+  }
+}
