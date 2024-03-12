@@ -3,14 +3,13 @@ import { promises as fs, existsSync, readdir, stat } from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { promisify } from 'util';
-import { request } from 'https';
-import { findCompatibleVersion } from './npm-registry';
+import { httpsRequest } from '@ngx-maintenance/devkit';
+import { findCompatibleVersion, PackageJson } from '@ngx-maintenance/npm-api';
 
 const readdirAsync = promisify(readdir);
 const statAsync = promisify(stat);
 const { logProgress } = createLogProcess();
 
-// ANSI escape codes for colors
 const colors = {
 	reset: "\x1b[0m",
 	red: "\x1b[31m",
@@ -164,29 +163,14 @@ const removeDir = async (dirPath: string): Promise<void> => {
 };
 
 const getLatestAngularVersion = () => {
-	return new Promise<string>((resolve, reject) => {
-		const options = {
-			hostname: 'registry.npmjs.org',
-			path: '/@angular/core/latest',
-			method: 'GET',
-		};
+	const options = {
+		hostname: 'registry.npmjs.org',
+		path: '/@angular/core/latest',
+		method: 'GET',
+	};
+	return httpsRequest<PackageJson>(options)
+		.then(data => data.version)
 
-		const req = request(options, (res) => {
-			let data = '';
-			res.on('data', (chunk) => {
-				data += chunk;
-			});
-			res.on('end', () => {
-				resolve(JSON.parse(data).version);
-			});
-		});
-
-		req.on('error', (e: any) => {
-			reject(e);
-		});
-
-		req.end();
-	});
 };
 
 const getCurrentAngularVersion = async (packageDir: string) => {

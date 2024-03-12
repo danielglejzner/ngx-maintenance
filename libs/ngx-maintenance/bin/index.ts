@@ -2,7 +2,6 @@
 
 import { createCommand } from '@commander-js/extra-typings';
 import { version } from '../package.json';
-import { connect } from 'https';
 import { checkoutImportAndMigrateAngular, getPackageInfo } from '@ngx-maintenance/devkit'
 const cliStyling = {
 	reset: '\x1b[0m',
