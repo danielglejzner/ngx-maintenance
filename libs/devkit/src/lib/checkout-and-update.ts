@@ -3,7 +3,7 @@ import { promises as fs, existsSync, readdir, stat } from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { promisify } from 'util';
-import { httpsRequest } from '@ngx-maintenance/devkit';
+import { httpsRequest } from '@ngx-maintenance/utils';
 import { findCompatibleVersion, PackageJson } from '@ngx-maintenance/npm-api';
 
 const readdirAsync = promisify(readdir);

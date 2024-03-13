@@ -1,5 +1,5 @@
 import { satisfies } from 'semver';
-import { tryCatch, httpsGet } from '@ngx-maintenance/devkit';
+import { tryCatch, httpsGet } from '@ngx-maintenance/utils';
 import { RegistryInfo } from './interfaces/registry-info';
 import { SearchQueryParams, SearchResponse } from './interfaces/search';
 import { PackageJson, PackageMetadata } from './interfaces/package';

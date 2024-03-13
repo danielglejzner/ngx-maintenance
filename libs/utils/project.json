@@ -1,0 +1,23 @@
+{
+  "name": "utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils",
+        "main": "libs/utils/src/index.ts",
+        "tsConfig": "libs/utils/tsconfig.lib.json",
+        "assets": ["libs/utils/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs utils {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    }
+  },
+  "tags": []
+}
