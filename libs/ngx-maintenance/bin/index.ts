@@ -2,7 +2,8 @@
 
 import { createCommand } from '@commander-js/extra-typings';
 import { version } from '../package.json';
-import { checkoutImportAndMigrateAngular, getPackageInfo } from '@ngx-maintenance/devkit'
+import { checkoutImportAndMigrateAngular } from '@ngx-maintenance/devkit'
+import { fetchNpmApi } from '@ngx-maintenance/npm-api'
 const cliStyling = {
 	reset: '\x1b[0m',
 	yellow: '\x1b[33m',
@@ -35,15 +36,14 @@ async function main() {
 		.argument('npm package', 'NPM package name')
 		.argument('[targetLocation]', 'Directory to clone the repository into', '')
 		.action(async (npmPackage, targetLocation?: string) => {
-			try {
-
-				const packageJson = await getPackageInfo(npmPackage, 'latest')
+			const { data: packageJson, error } = await fetchNpmApi('/{package:string}/{version:string}', { package: npmPackage, version: 'latest' })
+			if (error) {
+				console.error(`Migration failed: ${error.message}`);
+			} else {
 				const repoUrl = typeof packageJson.repository === 'string' ? packageJson.repository : packageJson?.repository?.url;
 				if (!repoUrl) throw new Error('Cound not locate Github URL from package. Please locate and use migrate-git instead')
 				await checkoutImportAndMigrateAngular(repoUrl, targetLocation);
 				console.log('Migration completed successfully.');
-			} catch (error: any) {
-				console.error(`Migration failed: ${error.message}`);
 			}
 		});
 
