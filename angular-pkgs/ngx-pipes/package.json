@@ -1,6 +1,6 @@
 {
   "name": "@ngx-maintenance/ngx-pipes",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "postinstall": "npx ngx-maintenance warn ngx-pipes"
   },
