@@ -1,0 +1,15 @@
+{
+  "generators": {
+    "migrate-to-maintenance-initiative": {
+      "version": "1.0.0",
+      "description": "Migration for v1.0.0",
+      "implementation": ".src//migration/migrate-to-maintenance-initiative"
+    }
+  },
+  "packageJsonUpdates": {
+    "1.0.0": {
+      "version": "1.0.0",
+      "packages": {}
+    }
+  }
+}

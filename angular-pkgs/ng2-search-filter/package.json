@@ -1,6 +1,9 @@
 {
   "name": "@ngx-maintenance/ng2-search-filter",
   "version": "0.0.1",
+  "scripts": {
+    "postinstall": "npx ngx-maintenance warn ng2-search-filter"
+  },
   "peerDependencies": {
     "@angular/common": "^17.1.0",
     "@angular/core": "^17.1.0"
@@ -8,5 +11,8 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "nx-migrations": {
+    "migrations": "./migrations.json"
+  }
 }
