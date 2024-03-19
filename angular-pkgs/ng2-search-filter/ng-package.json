@@ -1,0 +1,7 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/angular-pkgs/ng2-search-filter",
+  "lib": {
+    "entryFile": "src/index.ts"
+  }
+}
