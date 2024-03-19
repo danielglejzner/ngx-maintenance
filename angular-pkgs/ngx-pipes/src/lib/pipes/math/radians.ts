@@ -6,11 +6,11 @@ import { isNumberFinite } from '../helpers/helpers';
   standalone: true,
 })
 export class RadiansPipe implements PipeTransform {
-  transform(degrees: number): number {
+  transform(degrees: number | null | undefined): number {
     if (!isNumberFinite(degrees)) {
       return NaN;
     }
 
-    return (degrees * Math.PI) / 180;
+    return (<number>degrees * Math.PI) / 180;
   }
 }

@@ -6,7 +6,7 @@ import { isString } from '../helpers/helpers';
   standalone: true,
 })
 export class SlugifyPipe implements PipeTransform {
-  transform(str: string): string {
+  transform(str: string | null | undefined) {
     return isString(str)
       ? str
           .toLowerCase()

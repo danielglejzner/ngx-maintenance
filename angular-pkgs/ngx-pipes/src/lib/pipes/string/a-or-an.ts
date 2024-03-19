@@ -22,7 +22,7 @@ export class AorAnPipe implements PipeTransform {
     'm.sc.': 'an',
     unicorn: 'a',
   };
-  transform(stringEntity: string): string {
+  transform(stringEntity: string | null | undefined): string {
     if (!stringEntity || stringEntity === '') {
       return '';
     } else {

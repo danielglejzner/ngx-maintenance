@@ -1,4 +1,4 @@
-import { TestPipe } from './test';
+import { TestPipe } from './test-pipe';
 
 describe('TestPipe Tests', () => {
   let pipe: TestPipe;

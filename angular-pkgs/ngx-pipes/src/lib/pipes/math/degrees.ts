@@ -6,7 +6,7 @@ import { isNumberFinite } from '../helpers/helpers';
   standalone: true,
 })
 export class DegreesPipe implements PipeTransform {
-  transform(radians: number): number {
+  transform(radians: number | null | undefined): number {
     if (!isNumberFinite(radians)) {
       return NaN;
     }

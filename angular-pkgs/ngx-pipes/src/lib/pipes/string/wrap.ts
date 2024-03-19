@@ -6,7 +6,7 @@ import { isString } from '../helpers/helpers';
   standalone: true,
 })
 export class WrapPipe implements PipeTransform {
-  transform(str: string, prefix: string = '', suffix: string = ''): string {
+  transform(str: string | null | undefined, prefix: string = '', suffix: string = '') {
     if (!isString(str)) {
       return str;
     }
