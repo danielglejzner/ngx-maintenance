@@ -1,0 +1,26 @@
+{
+  "name": "ngx-pipes",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "angular-pkgs/ngx-pipes/src",
+  "prefix": "ngx-maintenance",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "angular-pkgs/ngx-pipes/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "angular-pkgs/ngx-pipes/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "angular-pkgs/ngx-pipes/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  }
+}

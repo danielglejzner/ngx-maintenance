@@ -1,0 +1,26 @@
+{
+  "name": "ng2-search-filter",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "angular-pkgs/ng2-search-filter/src",
+  "prefix": "ngx-maintenance",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "angular-pkgs/ng2-search-filter/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "angular-pkgs/ng2-search-filter/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "angular-pkgs/ng2-search-filter/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  }
+}
