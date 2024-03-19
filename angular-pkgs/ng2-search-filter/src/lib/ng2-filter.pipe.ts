@@ -2,7 +2,8 @@ import { Pipe, PipeTransform, Injectable } from "@angular/core";
 
 @Pipe({
   name: 'filter',
-  pure: false
+  pure: false,
+  standalone: true,
 })
 @Injectable()
 export class Ng2SearchPipe implements PipeTransform {
@@ -12,7 +13,7 @@ export class Ng2SearchPipe implements PipeTransform {
      * @param term term's search
      * @param excludes array of strings which will ignored during search
      */
-  transform(items: any, term: string, excludes: any = []): any {
+  transform(items: any, term: string | null | undefined, excludes: any = []): any {
     if (!term || !items) return items;
 
     return Ng2SearchPipe.filter(items, term, excludes);
@@ -30,7 +31,7 @@ export class Ng2SearchPipe implements PipeTransform {
     const toCompare = term.toLowerCase();
 
     function checkInside(item: any, term: string) {
-      
+
       if (typeof item === "string" && item.toString().toLowerCase().includes(toCompare)) {
         return true;
       }

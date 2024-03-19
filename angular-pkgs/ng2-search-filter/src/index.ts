@@ -1,1 +1,2 @@
-export * from './lib/ng2-search-filter/ng2-search-filter.component';
+export * from './lib/ng2-filter.module';
+export * from './lib/ng2-filter.pipe';
