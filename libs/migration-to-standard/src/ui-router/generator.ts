@@ -8,18 +8,10 @@ import {
 import { GeneratorSchema } from './schema';
 import { readFileSync } from 'fs';
 import { exit } from 'process';
-import { SourceFile, createSourceFile, ScriptTarget, isClassDeclaration, ClassDeclaration, isDecorator, Decorator, isCallExpression, isObjectLiteralExpression, PropertyAssignment, isIdentifier, Identifier } from 'typescript';
+import { SourceFile, createSourceFile, ScriptTarget, isClassDeclaration, ClassDeclaration, isDecorator, Decorator, isCallExpression, isObjectLiteralExpression, PropertyAssignment, isIdentifier, Identifier, factory, TransformationResult, transform, TransformerFactory, createPrinter, NewLineKind } from 'typescript';
 import { dirname, join, relative } from 'path';
-import { HtmlParser, RecursiveVisitor, visitAll, Attribute, Element } from '@angular/compiler';
-import { migrateHtml, parseHtml } from './utils/html';
-
-const uiRouterAttribute = [
-  'uiSref',
-  'uiParams',
-  'uiSrefActiveEq',
-  'uiSrefActive',
-  'ui-view' // this is the same as the component <ui-view>
-] as const
+import { migrateHtml, parseHtml, uiRouterAttribute } from './utils/html';
+import { updateComponentTemplateTransformer } from './utils/typescript';
 
 export async function Generator(tree: Tree, options: GeneratorSchema) {
   const packageJson = readJson(tree, 'package.json');
@@ -32,13 +24,15 @@ export async function Generator(tree: Tree, options: GeneratorSchema) {
 
   const projects = getProjects(tree);
 
-  const tsFilesToMigrate = new Map<string, SourceFile>()
-
-
-  const htmlFilesToMigrate = new Map<string, {
-    ast: ReturnType<typeof parseHtml>,
-    content: string
+  const filesToMigrate = new Map<string, {
+    ts: SourceFile, html?: {
+      className: string,
+      path: string,
+      ast: ReturnType<typeof parseHtml>,
+      content: string
+    }
   }>()
+
 
   for (const project of projects.values()) {
     visitNotIgnoredFiles(tree, project.root, (path) => {
@@ -49,11 +43,11 @@ export async function Generator(tree: Tree, options: GeneratorSchema) {
       const fileContent = tree.read(path, 'utf8') || readFileSync(path, 'utf8');
       if (fileContent.includes('@uirouter') || fileContent.includes('@Component')) {
         const currentFile = createSourceFile(path, fileContent, ScriptTarget.ESNext);
-        if (fileContent.includes('@uirouter')) {
-          tsFilesToMigrate.set(path, currentFile);
-        }
+
         if (fileContent.includes('@Component')) {
           const allClassesInFile = currentFile.statements.filter(s => isClassDeclaration(s)) as ClassDeclaration[];
+
+
           allClassesInFile.forEach(async cls => {
             const angularComponent = cls.modifiers?.find(
               m => {
@@ -71,7 +65,20 @@ export async function Generator(tree: Tree, options: GeneratorSchema) {
               const template = componentArg.properties.filter(p => ['template', 'templateUrl'].includes((p.name as Identifier).escapedText as string))[0] as PropertyAssignment;
               if ((template.name as Identifier).escapedText === 'template') {
                 const htmlContent = (template.initializer as Identifier).text;
-                htmlFilesToMigrate.set(path, { ast: parseHtml(htmlContent, path), content: htmlContent });
+                if (uiRouterAttribute.some(attribute => htmlContent.includes(attribute))) {
+                  filesToMigrate.set(
+                    path,
+                    {
+                      ts: currentFile,
+                      html: {
+                        className: cls.name!.text,
+                        path,
+                        ast: parseHtml(htmlContent, path),
+                        content: htmlContent
+                      }
+                    }
+                  );
+                }
               } else {
                 // if it's templateUrl then we need to read the file relative to current file 🤮 but have to be careful because some people use absolute paths!
                 const urlPath = (template.initializer as Identifier).text;
@@ -85,21 +92,62 @@ export async function Generator(tree: Tree, options: GeneratorSchema) {
                   fullHtmlPath = join(dirname(path), htmlPath);
                 }
                 const htmlContent = tree.read(fullHtmlPath, 'utf8') || readFileSync(fullHtmlPath, 'utf8');
-                htmlFilesToMigrate.set(path, { ast: parseHtml(htmlContent, fullHtmlPath), content: htmlContent });
+
+                if (uiRouterAttribute.some(attribute => htmlContent.includes(attribute))) {
+                  filesToMigrate.set(
+                    path,
+                    {
+                      ts: currentFile,
+                      html: {
+                        className: cls.name!.text,
+                        path,
+                        ast: parseHtml(htmlContent, fullHtmlPath),
+                        content: htmlContent
+                      }
+                    }
+                  );
+                }
+
               }
             }
           })
+
+          if (!filesToMigrate.get(path) && fileContent.includes('@uirouter')) {
+            filesToMigrate.set(path, { ts: currentFile });
+          }
+        } else {
+          if (fileContent.includes('@uirouter')) {
+            filesToMigrate.set(path, { ts: currentFile });
+          }
         }
       }
     });
   }
 
+  for (const [filePath, { ts, html }] of filesToMigrate) {
+    const transformers: TransformerFactory<any>[] = [];
+    if (html) {
+      const result = migrateHtml(html.content, html.ast);
+      if (filePath === html.path) {
+        // add transformer to update the template
+        transformers.push(updateComponentTemplateTransformer(result, html.className));
+      } else {
+        //  class doesn't use inline template
+        tree.write(filePath, result);
+      }
+    }
 
-  // First lets migrate the UI file
-  for (const [key, { ast, content }] of htmlFilesToMigrate) {
-    const result = migrateHtml(content, ast);
-    tree.write(key, result);
+
+
+    const transformResult: TransformationResult<SourceFile> = transform<SourceFile>(
+      ts,
+      transformers
+    );
+
+    const printer = createPrinter();
+    tree.write(filePath, printer.printFile(transformResult.transformed[0]))
   }
+
 }
 
 

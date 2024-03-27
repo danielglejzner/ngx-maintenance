@@ -1,6 +1,6 @@
 import { HtmlParser, RecursiveVisitor, visitAll, Attribute, Element } from '@angular/compiler';
 
-const uiRouterAttribute = [
+export const uiRouterAttribute = [
 	'uiSref',
 	'uiParams',
 	'uiSrefActiveEq',

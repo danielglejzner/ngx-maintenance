@@ -161,7 +161,7 @@ describe('migrateToAngularRouter', () => {
     };
   }
 
-  it('should not do anything if not component/directive', async () => {
+  it('should show convert with templateURL', async () => {
     const readContent = setup('componentWithTemplateUrl');
     await migrateToAngularRouter(tree, {});
     const [updated, updatedHtml] = readContent();
@@ -169,7 +169,7 @@ describe('migrateToAngularRouter', () => {
     expect(updatedHtml).toMatchSnapshot();
   });
 
-  it('should not do anything if no input', async () => {
+  it('should convert with inline html', async () => {
     const readContent = setup('componentWithInline');
     await migrateToAngularRouter(tree, {});
     const [updated] = readContent();

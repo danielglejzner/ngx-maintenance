@@ -1,72 +1,80 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`migrateToAngularRouter should not do anything if no input 1`] = `
-"
-  <div #dialogdiv></div>
-    <div class="navheader">
-      <ul *ngIf="isAuthenticated" class="nav nav-tabs">
-
-        <li routerLinkActive="active"> <a [routerLink]="['mymessages']" role="button"> Messages </a> </li>
-        <li routerLinkActive="active"> <a [routerLink]="['contacts']" role="button"> Contacts </a> </li>
-        <li routerLinkActive="active"> <a [routerLink]="['prefs']" role="button"> Preferences </a> </li>
-
-        <li class="navbar-right">
-          <button class="btn btn-primary fa fa-home" [routerLink]="['home']"></button>
-          <button style="margin-right: 15px;" class="btn btn-primary" [routerLink]="['mymessages/compose']">
-            <i class="fa fa-envelope"></i> New Message
-          </button>
-        </li>
-
-        <li class="navbar-text navbar-right logged-in-user" style="margin: 0.5em 1.5em;">
-          <div>
-            {{emailAddress}} <i class="fa fa-chevron-down"></i>
-            <div class="hoverdrop">
-              <button class="btn btn-primary" (click)="logout()">Log Out</button>
-            </div>
-          </div>
-        </li>
-
-      </ul>
-    </div>
-
-    <router-outlet ></router-outlet>
-"
-`;
-
-exports[`migrateToAngularRouter should not do anything if not component/directive 1`] = `
-"
-  <div #dialogdiv></div>
-    <div class="navheader">
-      <ul *ngIf="isAuthenticated" class="nav nav-tabs">
-
-        <li routerLinkActive="active"> <a [routerLink]="['mymessages']" role="button"> Messages </a> </li>
-        <li routerLinkActive="active"> <a [routerLink]="['contacts']" role="button"> Contacts </a> </li>
-        <li routerLinkActive="active"> <a [routerLink]="['prefs']" role="button"> Preferences </a> </li>
-
-        <li class="navbar-right">
-          <button class="btn btn-primary fa fa-home" [routerLink]="['home']"></button>
-          <button style="margin-right: 15px;" class="btn btn-primary" [routerLink]="['mymessages/compose']">
-            <i class="fa fa-envelope"></i> New Message
-          </button>
-        </li>
-
-        <li class="navbar-text navbar-right logged-in-user" style="margin: 0.5em 1.5em;">
-          <div>
-            {{emailAddress}} <i class="fa fa-chevron-down"></i>
-            <div class="hoverdrop">
-              <button class="btn btn-primary" (click)="logout()">Log Out</button>
-            </div>
-          </div>
-        </li>
-
-      </ul>
-    </div>
-
-    <router-outlet ></router-outlet>
+exports[`migrateToAngularRouter should convert with inline html 1`] = `
+"import { Component, ViewChild, ViewContainerRef, OnInit } from "@angular/core";
+import { DialogService } from "./global/dialog.service";
+import { StateService } from "@uirouter/core";
+import { AuthService } from "./global/auth.service";
+import { AppConfigService } from "./global/app-config.service";
+@Component({
+    selector: "app-root",
+    template: "\\n  <div #dialogdiv></div>\\n    <div class=navheader>\\n      <ul *ngIf=isAuthenticated class=nav nav-tabs>\\n\\n        <li routerLinkActive=active> <a [routerLink]=['mymessages'] role=button> Messages </a> </li>\\n        <li routerLinkActive=active> <a [routerLink]=['contacts'] role=button> Contacts </a> </li>\\n        <li routerLinkActive=active> <a [routerLink]=['prefs'] role=button> Preferences </a> </li>\\n\\n        <li class=navbar-right>\\n          <button class=btn btn-primary fa fa-home [routerLink]=['home']></button>\\n          <button style=margin-right: 15px; class=btn btn-primary [routerLink]=['mymessages/compose']>\\n            <i class=fa fa-envelope></i> New Message\\n          </button>\\n        </li>\\n\\n        <li class=navbar-text navbar-right logged-in-user style=margin: 0.5em 1.5em;>\\n          <div>\\n            {{emailAddress}} <i class=fa fa-chevron-down></i>\\n            <div class=hoverdrop>\\n              <button class=btn btn-primary (click)=logout()>Log Out</button>\\n            </div>\\n          </div>\\n        </li>\\n\\n      </ul>\\n    </div>\\n\\n    <router-outlet ></router-outlet>\\n",
+    styles: []
+})
+export class AppComponent implements OnInit {
+    @ViewChild("dialogdiv", { read: ViewContainerRef, static: true })
+    dialogdiv;
+    // data
+    emailAddress;
+    isAuthenticated;
+    constructor(appConfig: AppConfigService, public authService: AuthService, public $state: StateService, private dialog: DialogService) {
+        this.emailAddress = appConfig.emailAddress;
+        this.isAuthenticated = authService.isAuthenticated();
+    }
+    ngOnInit() {
+        this.dialog.vcRef = this.dialogdiv;
+    }
+    show() {
+        this.dialog.confirm("foo");
+    }
+    logout() {
+        const { authService, $state } = this;
+        authService.logout();
+        // Reload states after authentication change
+        return $state.go("welcome", {}, { reload: true });
+    }
+}
 "
 `;
 
-exports[`migrateToAngularRouter should not do anything if not component/directive 2`] = `
+exports[`migrateToAngularRouter should show convert with templateURL 1`] = `
+"import { Component, ViewChild, ViewContainerRef, OnInit } from "@angular/core";
+import { DialogService } from "./global/dialog.service";
+import { StateService } from "@uirouter/core";
+import { AuthService } from "./global/auth.service";
+import { AppConfigService } from "./global/app-config.service";
+@Component({
+    selector: "app-root",
+    templateUrl: "./my-file.html",
+    styles: []
+})
+export class AppComponent implements OnInit {
+    @ViewChild("dialogdiv", { read: ViewContainerRef, static: true })
+    dialogdiv;
+    // data
+    emailAddress;
+    isAuthenticated;
+    constructor(appConfig: AppConfigService, public authService: AuthService, public $state: StateService, private dialog: DialogService) {
+        this.emailAddress = appConfig.emailAddress;
+        this.isAuthenticated = authService.isAuthenticated();
+    }
+    ngOnInit() {
+        this.dialog.vcRef = this.dialogdiv;
+    }
+    show() {
+        this.dialog.confirm("foo");
+    }
+    logout() {
+        const { authService, $state } = this;
+        authService.logout();
+        // Reload states after authentication change
+        return $state.go("welcome", {}, { reload: true });
+    }
+}
+"
+`;
+
+exports[`migrateToAngularRouter should show convert with templateURL 2`] = `
 "
     import { Component, ViewChild, ViewContainerRef, OnInit } from '@angular/core';
 import { DialogService } from './global/dialog.service';
