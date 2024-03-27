@@ -104,6 +104,8 @@ function handleAttribute(attribute: Attribute, text: string): string {
 			return attribute.value ? `[name]="${attribute.value}"` : '';
 		case 'uiSrefActive':
 			return attribute.value === '/' ? `routerLinkActive="${attribute.value}" [routerLinkActiveOptions]="{exact: true}"` : `routerLinkActive="${attribute.value}"`;
+		case 'uiSrefActiveEq':
+			return `routerLinkActive="${attribute.value}" [routerLinkActiveOptions]="{exact: true}"`;
 		default:
 			return text;
 	}
