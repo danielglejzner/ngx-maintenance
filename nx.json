@@ -26,7 +26,7 @@
       "inputs": ["production", "^production"]
     },
     "@nx/js:tsc": {
-      "cache": true,
+      "cache": false,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     }
@@ -77,6 +77,6 @@
         "createRelease": "github"
       }
     }
-  },
-  "nxCloudAccessToken": "OTY0MTZlMjktN2I2OS00OTA2LWI2YjItYjg3ZDg0MDM3NTBifHJlYWQtd3JpdGU="
+  }
+  // "nxCloudAccessToken": "OTY0MTZlMjktN2I2OS00OTA2LWI2YjItYjg3ZDg0MDM3NTBifHJlYWQtd3JpdGU="
 }

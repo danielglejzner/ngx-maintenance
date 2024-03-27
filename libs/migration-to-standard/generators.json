@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "libs/migration-to-standard/src/ui-router/": {
+      "factory": "./src/ui-router/generator",
+      "schema": "./src/ui-router/schema.json",
+      "description": "Migrate from UI router to Angular router"
+    }
+  }
+}

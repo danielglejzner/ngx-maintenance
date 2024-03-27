@@ -1,0 +1,41 @@
+{
+  "name": "migration-to-standard",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/migration-to-standard/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/migration-to-standard",
+        "main": "libs/migration-to-standard/src/index.ts",
+        "tsConfig": "libs/migration-to-standard/tsconfig.lib.json",
+        "assets": [
+          "libs/migration-to-standard/*.md",
+          {
+            "input": "./libs/migration-to-standard/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/migration-to-standard/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/migration-to-standard",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./libs/migration-to-standard",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}
