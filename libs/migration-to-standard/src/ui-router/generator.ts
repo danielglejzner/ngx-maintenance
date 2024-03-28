@@ -11,7 +11,7 @@ import { exit } from 'process';
 import { SourceFile, createSourceFile, ScriptTarget, isClassDeclaration, ClassDeclaration, isDecorator, Decorator, isCallExpression, isObjectLiteralExpression, PropertyAssignment, isIdentifier, Identifier, factory, TransformationResult, transform, TransformerFactory, createPrinter, NewLineKind } from 'typescript';
 import { dirname, join, relative } from 'path';
 import { migrateHtml, parseHtml, uiRouterAttribute } from './utils/html';
-import { updateComponentTemplateTransformer } from './utils/typescript';
+import { uiOnParamsChangedMigration, updateComponentTemplateTransformer } from './utils/typescript';
 
 export async function Generator(tree: Tree, options: GeneratorSchema) {
   const packageJson = readJson(tree, 'package.json');
@@ -125,7 +125,9 @@ export async function Generator(tree: Tree, options: GeneratorSchema) {
   }
 
   for (const [filePath, { ts, html }] of filesToMigrate) {
-    const transformers: TransformerFactory<any>[] = [];
+    const transformers: TransformerFactory<any>[] = [
+      uiOnParamsChangedMigration,
+    ];
     if (html) {
       const result = migrateHtml(html.content, html.ast);
       if (filePath === html.path) {
