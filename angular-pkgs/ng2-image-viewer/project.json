@@ -1,0 +1,26 @@
+{
+  "name": "ng2-image-viewer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "angular-pkgs/ng2-image-viewer/src",
+  "prefix": "ngx-maintenance",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "angular-pkgs/ng2-image-viewer/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "angular-pkgs/ng2-image-viewer/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "angular-pkgs/ng2-image-viewer/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  }
+}

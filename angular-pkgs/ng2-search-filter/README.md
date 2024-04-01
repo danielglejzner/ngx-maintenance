@@ -1,3 +1,18 @@
+**NOTICE: This package is now maintained under the Angular Compatibility Maintenance Initiative**
+
+This package has been included in the Angular Compatibility Maintenance Initiative to ensure it remains compatible with the latest versions of Angular, despite not receiving active feature development or bug fixes. This initiative is a community-driven effort to maintain libraries that are critical for Angular projects but are no longer actively developed.
+
+**Important Considerations:**
+- **Maintenance Scope**: Updates will focus solely on Angular version compatibility. No new features will be added, and existing bugs will not be addressed outside of compatibility concerns.
+- **Temporary Solution**: This maintenance effort is intended as a temporary measure. Users are strongly encouraged to plan for the migration to actively supported alternatives as they become available.
+- **Contribution**: If you are interested in contributing to the maintenance of this package or others within the initiative.
+
+By using this package, you acknowledge the limitations of its maintenance under the Angular Compatibility Maintenance Initiative and the recommendation to seek more permanent solutions.
+
+**Package Name:** [@ngx-maintenance/ng2-search-filter](https://npmjs.com/package/@ngx-maintenance/ng2-search-filte)
+
+---
+# Original Readme (adjusted for repo):
 # Angular 2 / Angular 4 / Angular 5 Search Filter Pipe
 
 [![npm version](https://img.shields.io/badge/version-0.4.0-blue.svg)](https://www.npmjs.com/package/@ngx-maintenance/ng2-search-filter) [![](https://david-dm.org/solodynamo/@ngx-maintenance/ng2-search-filter.svg)](https://www.npmjs.com/package/@ngx-maintenance/ng2-search-filter)
