@@ -1,4 +1,3 @@
-
 **NOTICE: This package is now maintained under the Angular Compatibility Maintenance Initiative**
 
 This package has been included in the Angular Compatibility Maintenance Initiative to ensure it remains compatible with the latest versions of Angular, despite not receiving active feature development or bug fixes. This initiative is a community-driven effort to maintain libraries that are critical for Angular projects but are no longer actively developed.

@@ -19,6 +19,9 @@
         "angular-pkgs/angular-material-rail-drawer/src/index.ts"
       ],
       "@ngx-maintenance/devkit": ["libs/devkit/src/index.ts"],
+      "@ngx-maintenance/ng2-image-viewer": [
+        "angular-pkgs/ng2-image-viewer/src/index.ts"
+      ],
       "@ngx-maintenance/ng2-search-filter": [
         "angular-pkgs/ng2-search-filter/src/index.ts"
       ],

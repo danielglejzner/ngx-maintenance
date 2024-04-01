@@ -1,0 +1,59 @@
+<div id="{{idContainer}}" class="image-gallery-2">
+	<div class="image-container"></div>
+	<div class="inline-icon">
+		<div>
+			<a class="image-viewer-tooltip" (click)="showPDFOnly()" *ngIf="showPDFOnlyOption">
+				<span *ngIf="enableTooltip" class="tooltiptext filterTooltip">
+					<span>{{showPDFOnlyLabel}}:</span>
+					<i class="material-icons">{{showOnlyPDF ? 'check':'close'}}</i>
+				</span>
+				<i class="material-icons footer-icon">picture_as_pdf</i>
+			</a>
+		</div>
+		<div *ngIf="showOptions" class="options-image-viewer">
+			<a class="image-viewer-tooltip" *ngIf="zoomInButton" (click)="zoomIn()" (mouseover)="atualizarCorHoverIn($event)"
+				(mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{zoomInTooltipLabel}}</span>
+				<i class="material-icons footer-icon">zoom_in</i>
+			</a>
+			<a class="image-viewer-tooltip" *ngIf="zoomOutButton" (click)="zoomOut()"
+				(mouseover)="atualizarCorHoverIn($event)" (mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{zoomOutTooltipLabel}}</span>
+				<i class="material-icons footer-icon">zoom_out</i>
+			</a>
+
+			<a class="image-viewer-tooltip" *ngIf="rotate" (click)="rotacionarDireita()"
+				(mouseover)="atualizarCorHoverIn($event)" (mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{rotateRightTooltipLabel}}</span>
+				<i class="material-icons footer-icon">rotate_right</i>
+			</a>
+			<a class="image-viewer-tooltip" *ngIf="rotate" (click)="rotacionarEsquerda()"
+				(mouseover)="atualizarCorHoverIn($event)" (mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{rotateLeftTooltipLabel}}</span>
+				<i class="material-icons footer-icon">rotate_left</i>
+			</a>
+			<a class="image-viewer-tooltip" *ngIf="resetZoom" (click)="resetarZoom()"
+				(mouseover)="atualizarCorHoverIn($event)" (mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{resetZoomTooltipLabel}}</span>
+				<i class="material-icons footer-icon">fullscreen_exit</i>
+			</a>
+			<a class="image-viewer-tooltip" *ngIf="fullscreen" (click)="mostrarFullscreen()"
+				(mouseover)="atualizarCorHoverIn($event)" (mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{fullscreenTooltipLabel}}</span>
+				<i class="material-icons footer-icon">fullscreen</i>
+			</a>
+			<a class="image-viewer-tooltip" target="_blank" href="{{stringDownloadImagem}}"
+				download="{{defaultDownloadName}} {{indexImagemAtual}}.png" *ngIf="download"
+				(mouseover)="atualizarCorHoverIn($event)" (mouseout)="atualizarCorHoverOut($event)">
+				<span *ngIf="enableTooltip" class="tooltiptext">{{isURlImagem() ? openInNewTabTooltipLabel :
+					downloadTooltipLabel}}</span>
+				<i class="material-icons footer-icon">{{isURlImagem() ? 'open_in_browser' : 'file_download'}}</i>
+			</a>
+		</div>
+	</div>
+	<i class="material-icons prev" (click)="imagemAnterior()">keyboard_arrow_left</i>
+	<i class="material-icons next" (click)="proximaImagem()">keyboard_arrow_right</i>
+	<div class="footer-info">
+		<span id="current"></span>/<span class="total"></span>
+	</div>
+</div>
