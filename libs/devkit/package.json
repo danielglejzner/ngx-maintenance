@@ -1,6 +1,6 @@
 {
   "name": "@ngx-maintenance/devkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "dependencies": {
     "@ngx-maintenance/utils": "latest",
     "@ngx-maintenance/npm-api": "latest",
