@@ -3,5 +3,6 @@
   "dest": "../../dist/angular-pkgs/angular-material-rail-drawer",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@nx/devkit"]
 }
