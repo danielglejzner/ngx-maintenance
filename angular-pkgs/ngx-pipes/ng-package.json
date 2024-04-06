@@ -3,5 +3,8 @@
   "dest": "../../dist/angular-pkgs/ngx-pipes",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "@nx/devkit"
+  ]
 }
