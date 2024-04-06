@@ -1,11 +1,20 @@
 # utils
 
-This library was generated with [Nx](https://nx.dev).
+Helper functions for node http and our try catch function
 
-## Building
-
-Run `nx build utils` to build the library.
-
-## Running unit tests
-
-Run `nx test utils` to execute the unit tests via [Jest](https://jestjs.io).
+```
+export async function tryCatch<T, E extends Error>(
+	mainOperation: () => Promise<T> | T
+): Promise<{ error?: E; result?: T }> {
+	try {
+		const result = await Promise.resolve(mainOperation());
+		return { result };
+	} catch (error) {
+		if (error instanceof Error) {
+			return { error: error as E };
+		}
+		console.error("Caught an unexpected error type:", error);
+		return { error: new Error("An unexpected error occurred") as E };
+	}
+}
+```

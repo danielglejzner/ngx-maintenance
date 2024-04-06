@@ -21,5 +21,3 @@ const registryInfo = await fetchNpmApi('/');
 const compatibleVersion = await findCompatibleVersion('packageName', 'versionRange', 'peerDependency');
 ```
 
-## Documentation
-For detailed documentation and usage examples please use the docs and jsdocs.
