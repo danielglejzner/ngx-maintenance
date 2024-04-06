@@ -1,7 +1,9 @@
 {
   "name": "@ngx-maintenance/devkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
+    "@ngx-maintenance/utils": "latest",
+    "@ngx-maintenance/npm-api": "latest",
     "tslib": "^2.3.0"
   },
   "type": "commonjs",

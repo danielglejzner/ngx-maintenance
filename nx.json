@@ -71,11 +71,6 @@
     "releaseTagPattern": "release/{projectName}/{version}",
     "version": {
       "conventionalCommits": true
-    },
-    "changelog": {
-      "projectChangelogs": {
-        "createRelease": "github"
-      }
     }
   },
   "nxCloudAccessToken": "OTY0MTZlMjktN2I2OS00OTA2LWI2YjItYjg3ZDg0MDM3NTBifHJlYWQtd3JpdGU="
