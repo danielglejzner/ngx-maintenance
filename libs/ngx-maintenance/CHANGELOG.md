@@ -1,3 +1,15 @@
+## 0.1.2 (2024-04-06)
+
+
+### 🩹 Fixes
+
+- update documentation ([d2968b2](https://github.com/danielglejzner/ngx-maintenance/commit/d2968b2))
+
+
+### ❤️  Thank You
+
+- Jordan Hall @Jordan-Hall
+
 ## 0.1.1 (2024-04-06)
 
 
