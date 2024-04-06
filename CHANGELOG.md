@@ -1,3 +1,15 @@
+## 0.2.1 (2024-04-06)
+
+
+### 🩹 Fixes
+
+- **angular-material-rail-drawer:** add packages to root for build ([402ec02](https://github.com/danielglejzner/ngx-maintenance/commit/402ec02))
+
+
+### ❤️  Thank You
+
+- Jordan Hall @Jordan-Hall
+
 ## 0.2.0 (2024-04-06)
 
 
