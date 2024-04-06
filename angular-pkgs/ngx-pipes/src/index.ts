@@ -1,1 +1,1 @@
-export * from './lib/ngx-pipes/ngx-pipes.component';
+export * from './lib/ng-pipes.module';

@@ -3,5 +3,6 @@
   "dest": "../../dist/angular-pkgs/ng2-image-viewer",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["iv-viewer", "@nx/devkit"]
 }

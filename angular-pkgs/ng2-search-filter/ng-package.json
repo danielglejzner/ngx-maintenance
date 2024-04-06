@@ -3,5 +3,8 @@
   "dest": "../../dist/angular-pkgs/ng2-search-filter",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "@nx/devkit"
+  ]
 }
