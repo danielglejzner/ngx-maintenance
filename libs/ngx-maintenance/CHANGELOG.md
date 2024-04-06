@@ -1,3 +1,16 @@
+## 0.1.1 (2024-04-06)
+
+
+### 🩹 Fixes
+
+- **ngx-maintenance:** ensure bin folder compiles ([f4565e9](https://github.com/danielglejzner/ngx-maintenance/commit/f4565e9))
+
+
+### ❤️  Thank You
+
+- Arturo Volpe @aVolpe
+- Jordan Hall @Jordan-Hall
+
 ## 0.1.0 (2024-03-13)
 
 
