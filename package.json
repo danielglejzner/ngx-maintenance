@@ -1,6 +1,6 @@
 {
   "name": "@ngx-maintenance/source",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
@@ -13,6 +13,7 @@
     "@angular/compiler": "~17.1.0",
     "@angular/core": "~17.1.0",
     "@angular/forms": "~17.1.0",
+    "@angular/material": "^17.3.3",
     "@angular/platform-browser": "~17.1.0",
     "@angular/platform-browser-dynamic": "~17.1.0",
     "@angular/router": "~17.1.0",
